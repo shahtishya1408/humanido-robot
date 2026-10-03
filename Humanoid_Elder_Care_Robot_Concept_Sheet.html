@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Humanoid Elder-Care Robot - Engineering Concept Sheet</title>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2c5282;
+            --accent: #3182ce;
+            --light: #ebf8ff;
+            --text: #2d3748;
+            --border: #e2e8f0;
+            --warning: #c53030;
+            --success: #276749;
+            --provisional: #744210;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f7fafc;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .header h2 {
+            font-size: 1.2rem;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+
+        .warning-banner {
+            background: #fed7d7;
+            border: 2px solid var(--warning);
+            color: var(--warning);
+            padding: 15px 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: var(--secondary);
+            color: white;
+            padding: 15px 20px;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .spec-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .spec-table th, .spec-table td {
+            padding: 8px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .spec-table th {
+            background: var(--light);
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .spec-table tr:hover {
+            background: #f7fafc;
+        }
+
+        .robot-diagram {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .robot-svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .joint-diagram {
+            background: var(--light);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+
+        .joint-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 10px;
+        }
+
+        .joint-item {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 10px 15px;
+            font-size: 0.9rem;
+        }
+
+        .joint-id {
+            background: var(--accent);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .provisional {
+            background: #fef3c7;
+            border: 1px solid var(--provisional);
+            color: var(--provisional);
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-existing {
+            background: #c6f6d5;
+            color: var(--success);
+        }
+
+        .status-prototype {
+            background: #bee3f8;
+            color: var(--accent);
+        }
+
+        .status-warning {
+            background: #fed7d7;
+            color: var(--warning);
+        }
+
+        .section {
+            margin: 30px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .section h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .assembly-tree {
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        .assembly-tree .folder {
+            color: #63b3ed;
+        }
+
+        .assembly-tree .part {
+            color: #68d391;
+        }
+
+        .assembly-tree .indent {
+            margin-left: 20px;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        .comparison-table th, .comparison-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid var(--border);
+        }
+
+        .comparison-table th {
+            background: var(--primary);
+            color: white;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: var(--light);
+        }
+
+        .risk-high {
+            background: #fed7d7;
+            color: var(--warning);
+        }
+
+        .risk-low {
+            background: #c6f6d5;
+            color: var(--success);
+        }
+
+        .risk-medium {
+            background: #fef3c7;
+            color: #d69e2e;
+        }
+
+        .dimension-diagram {
+            background: #f7fafc;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .mobility-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .mobility-options {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 1.8rem;
+            }
+        }
+
+        .footer {
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .sensor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .sensor-card {
+            background: var(--light);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .sensor-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .sensor-name {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .sensor-location {
+            font-size: 0.85rem;
+            color: var(--text);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🤖 HUMANOID ELDER-CARE ROBOT</h1>
+        <h2>PROTOTYPE MECHANICAL ARCHITECTURE | FREECAD DEVELOPMENT REFERENCE</h2>
+    </div>
+
+    <div class="warning-banner">
+        ⚠️ PROVISIONAL DESIGN - ALL DIMENSIONS MUST BE VALIDATED BEFORE FABRICATION ⚠️
+    </div>
+
+    <div class="container">
+        <!-- Robot Overview -->
+        <div class="section">
+            <h3>A. Robot Overview & Dimensions</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">Target Specifications</div>
+                    <div class="card-body">
+                        <table class="spec-table">
+                            <tr><th>Parameter</th><th>Value</th><th>Unit</th></tr>
+                            <tr><td>Overall Height</td><td><strong>1500</strong> <span class="provisional">PROVISIONAL</span></td><td>mm</td></tr>
+                            <tr><td>Shoulder Width</td><td><strong>450</strong> <span class="provisional">PROVISIONAL</span></td><td>mm</td></tr>
+                            <tr><td>Torso Width</td><td><strong>350</strong> <span class="provisional">PROVISIONAL</span></td><td>mm</td></tr>
+                            <tr><td>Torso Depth</td><td><strong>250</strong> <span class="provisional">PROVISIONAL</span></td><td>mm</td></tr>
+                            <tr><td>Arm Length (total)</td><td><strong>600</strong> <span class="provisional">PROVISIONAL</span></td><td>mm</td></tr>
+                            <tr><td>Thigh Length</td><td><strong>380</strong> <span class="provisional">PROVISIONAL</span></td><td>mm</td></tr>
+                            <tr><td>Lower Leg Length</td><td><strong>350</strong> <span class="provisional">PROVISIONAL</span></td><td>mm</td></tr>
+                            <tr><td>Foot Length</td><td><strong>285</strong> <span class="provisional">PROVISIONAL</span></td><td>mm</td></tr>
+                            <tr><td>Foot Width</td><td><strong>150</strong> <span class="provisional">PROVISIONAL</span></td><td>mm</td></tr>
+                            <tr><td>Est. Total Mass</td><td><strong>~55</strong> <span class="provisional">PROVISIONAL</span></td><td>kg</td></tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Global Coordinate System</div>
+                    <div class="card-body">
+                        <svg width="200" height="200" viewBox="0 0 200 200">
+                            <!-- Axes -->
+                            <line x1="100" y1="100" x2="180" y2="100" stroke="#e53e3e" stroke-width="3" marker-end="url(#arrow)"/>
+                            <line x1="100" y1="100" x2="100" y2="20" stroke="#38a169" stroke-width="3" marker-end="url(#arrow)"/>
+                            <line x1="100" y1="100" x2="160" y2="140" stroke="#3182ce" stroke-width="3" marker-end="url(#arrow)"/>
+                            <!-- Labels -->
+                            <text x="185" y="105" fill="#e53e3e" font-weight="bold">X (Right)</text>
+                            <text x="85" y="15" fill="#38a169" font-weight="bold">Z (Up)</text>
+                            <text x="165" y="155" fill="#3182ce" font-weight="bold">Y (Forward)</text>
+                            <!-- Origin -->
+                            <circle cx="100" cy="100" r="5" fill="#2d3748"/>
+                            <text x="110" y="115" fill="#2d3748">Origin</text>
+                            <defs>
+                                <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                    <path d="M0,0 L0,6 L9,3 z" fill="currentColor"/>
+                                </marker>
+                            </defs>
+                        </svg>
+                        <p style="margin-top:15px; font-size:0.9rem;">
+                            <strong>X:</strong> Robot width (lateral)<br>
+                            <strong>Y:</strong> Robot depth (forward)<br>
+                            <strong>Z:</strong> Robot height (vertical)<br>
+                            <strong>Origin:</strong> Hip center, ground level
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- B. Full Isometric View -->
+        <div class="section">
+            <h3>B. Full Robot - Isometric View</h3>
+            <div class="robot-diagram">
+                <svg width="400" height="600" viewBox="0 0 400 600">
+                    <!-- Ground line -->
+                    <line x1="50" y1="550" x2="350" y2="550" stroke="#a0aec0" stroke-width="2" stroke-dasharray="5,5"/>
+
+                    <!-- Left Leg -->
+                    <rect x="130" y="450" width="50" height="100" fill="#718096" stroke="#2d3748" stroke-width="2" rx="5"/>
+                    <rect x="130" y="540" width="60" height="15" fill="#4a5568" stroke="#2d3748" stroke-width="2" rx="3"/>
+
+                    <!-- Right Leg -->
+                    <rect x="220" y="450" width="50" height="100" fill="#718096" stroke="#2d3748" stroke-width="2" rx="5"/>
+                    <rect x="210" y="540" width="60" height="15" fill="#4a5568" stroke="#2d3748" stroke-width="2" rx="3"/>
+
+                    <!-- Hip -->
+                    <rect x="110" y="410" width="180" height="45" fill="#805ad5" stroke="#2d3748" stroke-width="2" rx="8"/>
+
+                    <!-- Torso -->
+                    <rect x="120" y="210" width="160" height="200" fill="#6b46c1" stroke="#2d3748" stroke-width="2" rx="10"/>
+
+                    <!-- Torso Details -->
+                    <rect x="140" y="230" width="60" height="40" fill="#553c9a" stroke="#2d3748" stroke-width="1" rx="3"/>
+                    <rect x="200" y="230" width="60" height="40" fill="#553c9a" stroke="#2d3748" stroke-width="1" rx="3"/>
+                    <rect x="155" y="300" width="90" height="80" fill="#553c9a" stroke="#2d3748" stroke-width="1" rx="3"/>
+
+                    <!-- E-Stop -->
+                    <circle cx="250" cy="380" r="12" fill="#e53e3e" stroke="#c53030" stroke-width="2"/>
+                    <circle cx="250" cy="380" r="6" fill="#feb2b2"/>
+
+                    <!-- Left Arm -->
+                    <rect x="70" y="230" width="50" height="25" fill="#718096" stroke="#2d3748" stroke-width="2" rx="5"/>
+                    <rect x="45" y="250" width="25" height="90" fill="#718096" stroke="#2d3748" stroke-width="2" rx="5"/>
+                    <rect x="45" y="340" width="20" height="70" fill="#718096" stroke="#2d3748" stroke-width="2" rx="5"/>
+                    <rect x="45" y="400" width="25" height="30" fill="#4a5568" stroke="#2d3748" stroke-width="2" rx="3"/>
+
+                    <!-- Right Arm -->
+                    <rect x="280" y="230" width="50" height="25" fill="#718096" stroke="#2d3748" stroke-width="2" rx="5"/>
+                    <rect x="330" y="250" width="25" height="90" fill="#718096" stroke="#2d3748" stroke-width="2" rx="5"/>
+                    <rect x="335" y="340" width="20" height="70" fill="#718096" stroke="#2d3748" stroke-width="2" rx="5"/>
+                    <rect x="330" y="400" width="25" height="30" fill="#4a5568" stroke="#2d3748" stroke-width="2" rx="3"/>
+
+                    <!-- Neck -->
+                    <rect x="185" y="185" width="30" height="30" fill="#718096" stroke="#2d3748" stroke-width="2" rx="3"/>
+
+                    <!-- Head -->
+                    <ellipse cx="200" cy="150" rx="60" ry="50" fill="#6b46c1" stroke="#2d3748" stroke-width="2"/>
+
+                    <!-- Eyes -->
+                    <ellipse cx="175" cy="140" rx="12" ry="10" fill="#2d3748"/>
+                    <ellipse cx="225" cy="140" rx="12" ry="10" fill="#2d3748"/>
+                    <ellipse cx="175" cy="140" rx="5" ry="5" fill="#4a5568"/>
+                    <ellipse cx="225" cy="140" rx="5" ry="5" fill="#4a5568"/>
+
+                    <!-- Camera indicators -->
+                    <circle cx="175" cy="140" r="3" fill="#38a169"/>
+                    <circle cx="225" cy="140" r="3" fill="#38a169"/>
+
+                    <!-- Microphone array -->
+                    <rect x="180" y="100" width="40" height="8" fill="#553c9a" stroke="#2d3748" stroke-width="1" rx="2"/>
+
+                    <!-- Speaker grille -->
+                    <rect x="175" y="165" width="50" height="5" fill="#553c9a" stroke="#2d3748" stroke-width="1"/>
+                    <rect x="175" y="173" width="50" height="5" fill="#553c9a" stroke="#2d3748" stroke-width="1"/>
+
+                    <!-- Joint markers -->
+                    <circle cx="200" cy="210" r="5" fill="#f6e05e" stroke="#d69e2e" stroke-width="2"/>
+                    <circle cx="120" cy="230" r="5" fill="#f6e05e" stroke="#d69e2e" stroke-width="2"/>
+                    <circle cx="280" cy="230" r="5" fill="#f6e05e" stroke="#d69e2e" stroke-width="2"/>
+                    <circle cx="130" cy="450" r="5" fill="#f6e05e" stroke="#d69e2e" stroke-width="2"/>
+                    <circle cx="220" cy="450" r="5" fill="#f6e05e" stroke="#d69e2e" stroke-width="2"/>
+
+                    <!-- Dimension lines -->
+                    <line x1="80" y1="50" x2="80" y2="550" stroke="#e53e3e" stroke-width="1" stroke-dasharray="3,3"/>
+                    <line x1="75" y1="50" x2="85" y2="50" stroke="#e53e3e" stroke-width="1"/>
+                    <line x1="75" y1="550" x2="85" y2="550" stroke="#e53e3e" stroke-width="1"/>
+                    <text x="70" y="300" fill="#e53e3e" font-size="12" transform="rotate(-90, 70, 300)">~1500mm</text>
+                </svg>
+                <p style="margin-top:15px; font-size:0.85rem; color:#666;">
+                    Isometric view showing major assemblies. Joint positions marked in yellow.
+                </p>
+            </div>
+        </div>
+
+        <!-- C-F. Orthographic Views -->
+        <div class="section">
+            <h3>C-F. Orthographic Views</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">C. Front View</div>
+                    <div class="card-body" style="text-align:center;">
+                        <svg width="200" height="300" viewBox="0 0 200 300">
+                            <!-- Ground -->
+                            <line x1="20" y1="280" x2="180" y2="280" stroke="#a0aec0" stroke-width="1"/>
+                            <!-- Feet -->
+                            <rect x="50" y="265" width="40" height="15" fill="#4a5568" stroke="#2d3748" rx="2"/>
+                            <rect x="110" y="265" width="40" height="15" fill="#4a5568" stroke="#2d3748" rx="2"/>
+                            <!-- Legs -->
+                            <rect x="60" y="190" width="25" height="75" fill="#718096" stroke="#2d3748" rx="3"/>
+                            <rect x="115" y="190" width="25" height="75" fill="#718096" stroke="#2d3748" rx="3"/>
+                            <!-- Hip -->
+                            <rect x="55" y="175" width="90" height="20" fill="#805ad5" stroke="#2d3748" rx="4"/>
+                            <!-- Torso -->
+                            <rect x="55" y="60" width="90" height="115" fill="#6b46c1" stroke="#2d3748" rx="6"/>
+                            <!-- Arms -->
+                            <rect x="35" y="70" width="20" height="70" fill="#718096" stroke="#2d3748" rx="4"/>
+                            <rect x="35" y="140" width="15" height="50" fill="#718096" stroke="#2d3748" rx="3"/>
+                            <rect x="145" y="70" width="20" height="70" fill="#718096" stroke="#2d3748" rx="4"/>
+                            <rect x="150" y="140" width="15" height="50" fill="#718096" stroke="#2d3748" rx="3"/>
+                            <!-- Neck -->
+                            <rect x="90" y="45" width="20" height="20" fill="#718096" stroke="#2d3748" rx="2"/>
+                            <!-- Head -->
+                            <ellipse cx="100" cy="30" rx="35" ry="25" fill="#6b46c1" stroke="#2d3748"/>
+                            <!-- Eyes -->
+                            <circle cx="88" cy="25" r="5" fill="#2d3748"/>
+                            <circle cx="112" cy="25" r="5" fill="#2d3748"/>
+                            <!-- Dimension -->
+                            <line x1="10" y1="5" x2="10" y2="280" stroke="#e53e3e" stroke-width="1"/>
+                            <text x="5" y="150" fill="#e53e3e" font-size="10" transform="rotate(-90, 5, 150)">~1500mm</text>
+                        </svg>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">D. Side View (Right)</div>
+                    <div class="card-body" style="text-align:center;">
+                        <svg width="150" height="300" viewBox="0 0 150 300">
+                            <!-- Ground -->
+                            <line x1="20" y1="280" x2="130" y2="280" stroke="#a0aec0" stroke-width="1"/>
+                            <!-- Foot -->
+                            <rect x="60" y="265" width="50" height="15" fill="#4a5568" stroke="#2d3748" rx="2"/>
+                            <!-- Leg -->
+                            <rect x="75" y="190" width="25" height="75" fill="#718096" stroke="#2d3748" rx="3"/>
+                            <!-- Hip -->
+                            <rect x="60" y="175" width="55" height="20" fill="#805ad5" stroke="#2d3748" rx="4"/>
+                            <!-- Torso -->
+                            <rect x="55" y="60" width="65" height="115" fill="#6b46c1" stroke="#2d3748" rx="6"/>
+                            <!-- Arm -->
+                            <rect x="120" y="70" width="20" height="60" fill="#718096" stroke="#2d3748" rx="4"/>
+                            <rect x="120" y="130" width="15" height="50" fill="#718096" stroke="#2d3748" rx="3"/>
+                            <!-- Neck -->
+                            <rect x="75" y="45" width="25" height="20" fill="#718096" stroke="#2d3748" rx="2"/>
+                            <!-- Head -->
+                            <ellipse cx="87" cy="30" rx="30" ry="22" fill="#6b46c1" stroke="#2d3748"/>
+                            <!-- Eye -->
+                            <ellipse cx="100" cy="25" rx="8" ry="6" fill="#2d3748"/>
+                            <!-- E-Stop -->
+                            <circle cx="75" cy="160" r="8" fill="#e53e3e" stroke="#c53030"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">E. Rear View</div>
+                    <div class="card-body" style="text-align:center;">
+                        <svg width="200" height="300" viewBox="0 0 200 300">
+                            <!-- Ground -->
+                            <line x1="20" y1="280" x2="180" y2="280" stroke="#a0aec0" stroke-width="1"/>
+                            <!-- Feet -->
+                            <rect x="50" y="265" width="40" height="15" fill="#4a5568" stroke="#2d3748" rx="2"/>
+                            <rect x="110" y="265" width="40" height="15" fill="#4a5568" stroke="#2d3748" rx="2"/>
+                            <!-- Legs -->
+                            <rect x="60" y="190" width="25" height="75" fill="#718096" stroke="#2d3748" rx="3"/>
+                            <rect x="115" y="190" width="25" height="75" fill="#718096" stroke="#2d3748" rx="3"/>
+                            <!-- Hip -->
+                            <rect x="55" y="175" width="90" height="20" fill="#805ad5" stroke="#2d3748" rx="4"/>
+                            <!-- Torso -->
+                            <rect x="55" y="60" width="90" height="115" fill="#6b46c1" stroke="#2d3748" rx="6"/>
+                            <!-- Rear panel details -->
+                            <rect x="65" y="80" width="70" height="20" fill="#553c9a" stroke="#2d3748" rx="2"/>
+                            <rect x="65" y="110" width="70" height="50" fill="#553c9a" stroke="#2d3748" rx="2"/>
+                            <!-- E-Stop -->
+                            <circle cx="100" cy="150" r="12" fill="#e53e3e" stroke="#c53030" stroke-width="2"/>
+                            <text x="96" y="154" fill="white" font-size="12" font-weight="bold">!</text>
+                        </svg>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">F. Top View</div>
+                    <div class="card-body" style="text-align:center;">
+                        <svg width="200" height="150" viewBox="0 0 200 150">
+                            <!-- Torso top -->
+                            <ellipse cx="100" cy="75" rx="60" ry="45" fill="#6b46c1" stroke="#2d3748" stroke-width="2"/>
+                            <!-- Shoulder markers -->
+                            <circle cx="45" cy="60" r="15" fill="#805ad5" stroke="#2d3748"/>
+                            <circle cx="155" cy="60" r="15" fill="#805ad5" stroke="#2d3748"/>
+                            <!-- Neck -->
+                            <circle cx="100" cy="35" r="15" fill="#718096" stroke="#2d3748"/>
+                            <!-- Head -->
+                            <ellipse cx="100" cy="20" rx="30" ry="15" fill="#6b46c1" stroke="#2d3748"/>
+                            <!-- Dimension -->
+                            <line x1="20" y1="10" x2="180" y2="10" stroke="#e53e3e" stroke-width="1"/>
+                            <text x="95" y="8" fill="#e53e3e" font-size="10">~450mm</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- G. Head Close-up -->
+        <div class="section">
+            <h3>G. Head Assembly Detail</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">Head Specifications</div>
+                    <div class="card-body">
+                        <table class="spec-table">
+                            <tr><th>Parameter</th><th>Value</th><th>Notes</th></tr>
+                            <tr><td>Head Width</td><td>220mm</td><td>Maximum</td></tr>
+                            <tr><td>Head Depth</td><td>180mm</td><td>Front to back</td></tr>
+                            <tr><td>Head Height</td><td>160mm</td><td>Total</td></tr>
+                            <tr><td>Eye Spacing</td><td>80mm</td><td>Camera centers</td></tr>
+                            <tr><td>Camera Mount</td><td>Brackets</td><td>RGB + Depth</td></tr>
+                        </table>
+                        <h4 style="margin-top:15px; color:var(--primary);">Components</h4>
+                        <ul style="margin-left:20px; font-size:0.9rem;">
+                            <li>Head_Frame (Aluminum 6061, 5mm)</li>
+                            <li>Head_Cover (ABS, 3D printed)</li>
+                            <li>Camera_Mount (RGB bracket)</li>
+                            <li>Depth_Camera_Mount (D455)</li>
+                            <li>Microphone_Array (4-8 mics)</li>
+                            <li>Speaker_Grille</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Head Diagram</div>
+                    <div class="card-body" style="text-align:center;">
+                        <svg width="220" height="180" viewBox="0 0 220 180">
+                            <!-- Head shell -->
+                            <ellipse cx="110" cy="90" rx="100" ry="80" fill="#6b46c1" stroke="#2d3748" stroke-width="2"/>
+                            <!-- Face area -->
+                            <ellipse cx="110" cy="85" rx="70" ry="55" fill="#553c9a" stroke="#2d3748" stroke-width="1"/>
+                            <!-- Cameras (eyes) -->
+                            <circle cx="75" cy="70" r="18" fill="#2d3748" stroke="#1a202c" stroke-width="2"/>
+                            <circle cx="75" cy="70" r="10" fill="#1a202c"/>
+                            <circle cx="73" cy="68" r="3" fill="#38a169"/>
+                            <circle cx="145" cy="70" r="18" fill="#2d3748" stroke="#1a202c" stroke-width="2"/>
+                            <circle cx="145" cy="70" r="10" fill="#1a202c"/>
+                            <circle cx="143" cy="68" r="3" fill="#38a169"/>
+                            <!-- Microphones -->
+                            <rect x="85" y="25" width="15" height="8" fill="#3182ce" rx="2"/>
+                            <rect x="105" y="25" width="15" height="8" fill="#3182ce" rx="2"/>
+                            <rect x="125" y="25" width="15" height="8" fill="#3182ce" rx="2"/>
+                            <!-- Speaker grille -->
+                            <rect x="70" y="110" width="80" height="25" fill="#553c9a" stroke="#2d3748" rx="3"/>
+                            <line x1="75" y1="118" x2="145" y2="118" stroke="#4a5568" stroke-width="2"/>
+                            <line x1="75" y1="125" x2="145" y2="125" stroke="#4a5568" stroke-width="2"/>
+                            <line x1="75" y1="132" x2="145" y2="132" stroke="#4a5568" stroke-width="2"/>
+                            <!-- Neck interface -->
+                            <rect x="90" y="160" width="40" height="20" fill="#718096" stroke="#2d3748" rx="3"/>
+                            <!-- Labels -->
+                            <text x="75" y="55" fill="white" font-size="9" text-anchor="middle">RGB</text>
+                            <text x="145" y="55" fill="white" font-size="9" text-anchor="middle">Depth</text>
+                            <text x="110" y="18" fill="white" font-size="9" text-anchor="middle">Mic Array</text>
+                            <text x="110" y="170" fill="white" font-size="8" text-anchor="middle">Neck IF</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- H. Shoulder/Elbow Close-up -->
+        <div class="section">
+            <h3>H. Shoulder & Elbow Joint Detail</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">Shoulder Joint (J3, J4)</div>
+                    <div class="card-body">
+                        <table class="spec-table">
+                            <tr><th>Parameter</th><th>J3 (Flex/Ext)</th><th>J4 (Abd/Add)</th></tr>
+                            <tr><td>Axis</td><td>X</td><td>Z</td></tr>
+                            <tr><td>Range</td><td>-180° to +45°</td><td>±90°</td></tr>
+                            <tr><td>Max Speed</td><td>120°/s</td><td>90°/s</td></tr>
+                            <tr><td>Torque</td><td>30 Nm</td><td>25 Nm</td></tr>
+                        </table>
+                        <p style="margin-top:15px; font-size:0.9rem;">
+                            <strong>Features:</strong><br>
+                            • Dual-axis spherical joint<br>
+                            • Dual bearing support<br>
+                            • Integrated actuator (2x)<br>
+                            • Encoder for position feedback<br>
+                            • Cable passage
+                        </p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Elbow Joint (J5)</div>
+                    <div class="card-body">
+                        <table class="spec-table">
+                            <tr><th>Parameter</th><th>Value</th></tr>
+                            <tr><td>Axis</td><td>X</td></tr>
+                            <tr><td>Range</td><td>0° to 145°</td></tr>
+                            <tr><td>Max Speed</td><td>150°/s</td></tr>
+                            <tr><td>Torque</td><td>20 Nm</td></tr>
+                        </table>
+                        <p style="margin-top:15px; font-size:0.9rem;">
+                            <strong>Features:</strong><br>
+                            • Single-axis revolute joint<br>
+                            • Bearing support both sides<br>
+                            • Integrated actuator<br>
+                            • Encoder mount<br>
+                            • Forearm cable routing
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- I. Wrist/Gripper Close-up -->
+        <div class="section">
+            <h3>I. Wrist & Gripper Detail</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">Wrist Joints (J6, J7)</div>
+                    <div class="card-body">
+                        <table class="spec-table">
+                            <tr><th>Parameter</th><th>J6 (Flex/Ext)</th><th>J7 (Rot)</th></tr>
+                            <tr><td>Axis</td><td>X</td><td>Z</td></tr>
+                            <tr><td>Range</td><td>±30°</td><td>±90°</td></tr>
+                            <tr><td>Max Speed</td><td>180°/s</td><td>180°/s</td></tr>
+                            <tr><td>Torque</td><td>5 Nm</td><td>3 Nm</td></tr>
+                        </table>
+                        <p style="margin-top:15px; font-size:0.9rem;">
+                            Compact dual-axis design for wrist orientation and gripper alignment.
+                        </p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Gripper (J8)</div>
+                    <div class="card-body">
+                        <table class="spec-table">
+                            <tr><th>Parameter</th><th>Value</th></tr>
+                            <tr><td>Type</td><td>Parallel 2-finger</td></tr>
+                            <tr><td>Stroke</td><td>80 mm</td></tr>
+                            <tr><td>Max Grip Force</td><td>10 Nm</td></tr>
+                            <tr><td>Weight</td><td>0.5 kg</td></tr>
+                        </table>
+                        <p style="margin-top:15px; font-size:0.9rem;">
+                            <strong>Safety Features:</strong><br>
+                            • Rounded fingertips<br>
+                            • Silicone contact pads<br>
+                            • Force limiting<br>
+                            • Safe object handling
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- J. Hip/Knee/Ankle Close-up -->
+        <div class="section">
+            <h3>J. Lower Body Joint Detail</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">Hip Joints (J15/J16, J19/J20)</div>
+                    <div class="card-body">
+                        <table class="spec-table">
+                            <tr><th>Parameter</th><th>Flex/Ext</th><th>Abd/Add</th></tr>
+                            <tr><td>Axis</td><td>X</td><td>Z</td></tr>
+                            <tr><td>Range</td><td>-120° to +45°</td><td>±45°</td></tr>
+                            <tr><td>Speed</td><td>90°/s</td><td>60°/s</td></tr>
+                            <tr><td>Torque</td><td>50 Nm</td><td>40 Nm</td></tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Knee Joint (J17/J21)</div>
+                    <div class="card-body">
+                        <table class="spec-table">
+                            <tr><th>Parameter</th><th>Value</th></tr>
+                            <tr><td>Axis</td><td>X</td></tr>
+                            <tr><td>Range</td><td>-145° to 0°</td></tr>
+                            <tr><td>Speed</td><td>100°/s</td></tr>
+                            <tr><td>Torque</td><td>45 Nm</td></tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Ankle Joint (J18/J22)</div>
+                    <div class="card-body">
+                        <table class="spec-table">
+                            <tr><th>Parameter</th><th>Value</th></tr>
+                            <tr><td>Axis</td><td>X</td></tr>
+                            <tr><td>Range</td><td>±30°</td></tr>
+                            <tr><td>Speed</td><td>120°/s</td></tr>
+                            <tr><td>Torque</td><td>20 Nm</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- K. Torso Electronics Area -->
+        <div class="section">
+            <h3>K. Torso Electronics & Battery Area</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">Electronics Bay</div>
+                    <div class="card-body">
+                        <svg width="100%" height="200" viewBox="0 0 300 200">
+                            <!-- Bay outline -->
+                            <rect x="20" y="20" width="260" height="160" fill="#1a202c" stroke="#4a5568" stroke-width="2" rx="5"/>
+                            <!-- Computer -->
+                            <rect x="40" y="40" width="100" height="60" fill="#2d3748" stroke="#4a5568" rx="3"/>
+                            <text x="90" y="75" fill="#e2e8f0" font-size="11" text-anchor="middle">COMPUTER</text>
+                            <!-- Motor Controller -->
+                            <rect x="160" y="40" width="100" height="60" fill="#2d3748" stroke="#4a5568" rx="3"/>
+                            <text x="210" y="75" fill="#e2e8f0" font-size="11" text-anchor="middle">MOTOR CTRL</text>
+                            <!-- Power Distribution -->
+                            <rect x="40" y="115" width="100" height="45" fill="#2d3748" stroke="#4a5568" rx="3"/>
+                            <text x="90" y="143" fill="#e2e8f0" font-size="11" text-anchor="middle">POWER DIST</text>
+                            <!-- Comms -->
+                            <rect x="160" y="115" width="100" height="45" fill="#2d3748" stroke="#4a5568" rx="3"/>
+                            <text x="210" y="143" fill="#e2e8f0" font-size="11" text-anchor="middle">COMMS</text>
+                            <!-- Cables -->
+                            <line x1="140" y1="70" x2="160" y2="70" stroke="#3182ce" stroke-width="2"/>
+                            <line x1="140" y1="137" x2="160" y2="137" stroke="#3182ce" stroke-width="2"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Battery Bay</div>
+                    <div class="card-body">
+                        <table class="spec-table">
+                            <tr><th>Component</th><th>Specification</th></tr>
+                            <tr><td>Battery Type</td><td>48V Li-ion</td></tr>
+                            <tr><td>Capacity</td><td>10Ah (TBD)</td></tr>
+                            <tr><td>Estimated Mass</td><td>~5 kg</td></tr>
+                            <tr><td>Location</td><td>Lower torso</td></tr>
+                        </table>
+                        <p style="margin-top:15px; font-size:0.9rem;">
+                            <strong>Features:</strong><br>
+                            • Removable tray<br>
+                            • Guide rails<br>
+                            • Latching mechanism<br>
+                            • Thermal management
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- L. Battery Area (redundant but in spec) -->
+        <div class="section">
+            <h3>L. Power System</h3>
+            <table class="comparison-table">
+                <tr><th>Subsystem</th><th>Component</th><th>Specification</th><th>Mount Location</th></tr>
+                <tr><td>Battery</td><td>48V Li-ion Pack</td><td>10Ah (TBD)</td><td>Lower torso</td></tr>
+                <tr><td>Power Distribution</td><td>Custom PDB</td><td>48V, 12V, 5V outputs</td><td>Torso</td></tr>
+                <tr><td>Main Computer</td><td>Jetson AGX Orin / NUC</td><td>12-24V, 60W</td><td>Upper torso</td></tr>
+                <tr><td>Motor Controller</td><td>ODrive 48V / Elmo</td><td>12-48V input</td><td>Mid torso</td></tr>
+            </table>
+        </div>
+
+        <!-- M. Sensor Placement -->
+        <div class="section">
+            <h3>M. Sensor Placement</h3>
+            <div class="sensor-grid">
+                <div class="sensor-card">
+                    <div class="sensor-icon">📷</div>
+                    <div class="sensor-name">RGB Camera</div>
+                    <div class="sensor-location">Head (eyes)</div>
+                    <span class="status-badge status-prototype">Critical</span>
+                </div>
+                <div class="sensor-card">
+                    <div class="sensor-icon">👁️</div>
+                    <div class="sensor-name">Depth Camera</div>
+                    <div class="sensor-location">Head (eyes)</div>
+                    <span class="status-badge status-prototype">Critical</span>
+                </div>
+                <div class="sensor-card">
+                    <div class="sensor-icon">🎤</div>
+                    <div class="sensor-name">Mic Array</div>
+                    <div class="sensor-location">Head (top)</div>
+                    <span class="status-badge status-existing">Existing</span>
+                </div>
+                <div class="sensor-card">
+                    <div class="sensor-icon">🔊</div>
+                    <div class="sensor-name">Speaker</div>
+                    <div class="sensor-location">Head (mouth)</div>
+                    <span class="status-badge status-existing">Existing</span>
+                </div>
+                <div class="sensor-card">
+                    <div class="sensor-icon">📡</div>
+                    <div class="sensor-name">IMU</div>
+                    <div class="sensor-location">Torso (center)</div>
+                    <span class="status-badge status-prototype">Critical</span>
+                </div>
+                <div class="sensor-card">
+                    <div class="sensor-icon">📏</div>
+                    <div class="sensor-name">ToF Sensors</div>
+                    <div class="sensor-location">Lower torso (x4)</div>
+                    <span class="status-badge status-prototype">High</span>
+                </div>
+                <div class="sensor-card">
+                    <div class="sensor-icon">🛸</div>
+                    <div class="sensor-name">LiDAR (opt)</div>
+                    <div class="sensor-location">Upper torso</div>
+                    <span class="status-badge status-prototype">Optional</span>
+                </div>
+                <div class="sensor-card">
+                    <div class="sensor-icon">👆</div>
+                    <div class="sensor-name">Touch Sensors</div>
+                    <div class="sensor-location">Hands (x2)</div>
+                    <span class="status-badge status-prototype">Medium</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- N. Joint-Axis Diagram -->
+        <div class="section">
+            <h3>N. Joint-Axis Reference Diagram</h3>
+            <div class="joint-diagram">
+                <svg width="100%" height="400" viewBox="0 0 800 400">
+                    <!-- Head with joints -->
+                    <ellipse cx="400" cy="50" rx="50" ry="35" fill="#6b46c1" stroke="#2d3748" stroke-width="2"/>
+                    <text x="400" y="55" fill="white" font-size="12" text-anchor="middle">HEAD</text>
+                    <!-- J1, J2 -->
+                    <circle cx="400" cy="85" r="8" fill="#f6e05e" stroke="#d69e2e" stroke-width="2"/>
+                    <text x="400" y="115" fill="#2d3748" font-size="10" text-anchor="middle">J1,J2</text>
+                    <line x1="400" y1="93" x2="400" y2="110" stroke="#f6e05e" stroke-width="2"/>
+
+                    <!-- Torso -->
+                    <rect x="330" y="130" width="140" height="150" fill="#6b46c1" stroke="#2d3748" stroke-width="2" rx="8"/>
+                    <text x="400" y="200" fill="white" font-size="12" text-anchor="middle">TORSO</text>
+
+                    <!-- Shoulders J3,J4 and J9,J10 -->
+                    <circle cx="330" cy="150" r="10" fill="#f6e05e" stroke="#d69e2e" stroke-width="2"/>
+                    <circle cx="470" cy="150" r="10" fill="#f6e05e" stroke="#d69e2e" stroke-width="2"/>
+                    <text x="330" y="175" fill="#2d3748" font-size="9" text-anchor="middle">J3,J4</text>
+                    <text x="470" y="175" fill="#2d3748" font-size="9" text-anchor="middle">J9,J10</text>
+
+                    <!-- Arms -->
+                    <rect x="280" y="150" width="50" height="20" fill="#718096" stroke="#2d3748" rx="4"/>
+                    <rect x="260" y="165" width="20" height="80" fill="#718096" stroke="#2d3748" rx="4"/>
+                    <circle cx="270" cy="245" r="8" fill="#f6e05e" stroke="#d69e2e" stroke-width="2"/>
+                    <text x="270" y="265" fill="#2d3748" font-size="9" text-anchor="middle">J5</text>
+                    <rect x="255" y="250" width="15" height="60" fill="#718096" stroke="#2d3748" rx="3"/>
+                    <circle cx="262" cy="315" r="8" fill="#f6e05e" stroke="#d69e2e" stroke-width="2"/>
+                    <text x="262" y="335" fill="#2d3748" font-size="9" text-anchor="middle">J6,J7</text>
+                    <rect x="252" y="320" width="20" height="30" fill="#4a5568" stroke="#2d3748" rx="3"/>
+
+                    <!-- Right arm -->
+                    <rect x="470" y="150" width="50" height="20" fill="#718096" stroke="#2d3748" rx="4"/>
+                    <rect x="520" y="165" width="20" height="80" fill="#718096" stroke="#2d3748" rx="4"/>
+                    <circle cx="530" cy="245" r="8" fill="#f6e05e" stroke="#d69e2e" stroke-width="2"/>
+                    <rect x="525" y="250" width="15" height="60" fill="#718096" stroke="#2d3748" rx="3"/>
+                    <circle cx="538" cy="315" r="8" fill="#f6e05e" stroke="#d69e2e" stroke-width="2"/>
+                    <rect x="528" y="320" width="20" height="30" fill="#4a5568" stroke="#2d3748" rx="3"/>
+
+                    <!-- Hip -->
+                    <rect x="350" y="280" width="100" height="30" fill="#805ad5" stroke="#2d3748" rx="6"/>
+                    <circle cx="370" cy="310" r="10" fill="#f6e05e" stroke="#d69e2e" stroke-width="2"/>
+                    <circle cx="430" cy="310" r="10" fill="#f6e05e" stroke="#d69e2e" stroke-width="2"/>
+                    <text x="370" y="330" fill="#2d3748" font-size="9" text-anchor="middle">J15,J16</text>
+                    <text x="430" y="330" fill="#2d3748" font-size="9" text-anchor="middle">J19,J20</text>
+
+                    <!-- Legs -->
+                    <rect x="355" y="340" width="30" height="120" fill="#718096" stroke="#2d3748" rx="4"/>
+                    <circle cx="370" cy="460" r="8" fill="#f6e05e" stroke="#d69e2e" stroke-width="2"/>
+                    <text x="370" y="480" fill="#2d3748" font-size="9" text-anchor="middle">J17</text>
+                    <rect x="355" y="465" width="30" height="110" fill="#718096" stroke="#2d3748" rx="4"/>
+                    <circle cx="370" cy="575" r="8" fill="#f6e05e" stroke="#d69e2e" stroke-width="2"/>
+                    <text x="370" y="595" fill="#2d3748" font-size="9" text-anchor="middle">J18</text>
+                    <rect x="345" y="580" width="50" height="15" fill="#4a5568" stroke="#2d3748" rx="3"/>
+
+                    <!-- Right leg -->
+                    <rect x="415" y="340" width="30" height="120" fill="#718096" stroke="#2d3748" rx="4"/>
+                    <circle cx="430" cy="460" r="8" fill="#f6e05e" stroke="#d69e2e" stroke-width="2"/>
+                    <rect x="415" y="465" width="30" height="110" fill="#718096" stroke="#2d3748" rx="4"/>
+                    <circle cx="430" cy="575" r="8" fill="#f6e05e" stroke="#d69e2e" stroke-width="2"/>
+                    <rect x="405" y="580" width="50" height="15" fill="#4a5568" stroke="#2d3748" rx="3"/>
+
+                    <!-- Ground -->
+                    <line x1="50" y1="600" x2="750" y2="600" stroke="#a0aec0" stroke-width="2"/>
+
+                    <!-- Legend -->
+                    <rect x="600" y="100" width="180" height="250" fill="white" stroke="#e2e8f0" rx="5"/>
+                    <text x="690" y="125" fill="#2d3748" font-size="12" font-weight="bold" text-anchor="middle">Joint Legend</text>
+                    <text x="615" y="150" fill="#2d3748" font-size="10">J1, J2: Neck (Pan, Tilt)</text>
+                    <text x="615" y="170" fill="#2d3748" font-size="10">J3-J8: Left Arm</text>
+                    <text x="615" y="190" fill="#2d3748" font-size="10">J9-J14: Right Arm</text>
+                    <text x="615" y="210" fill="#2d3748" font-size="10">J15-J18: Left Leg</text>
+                    <text x="615" y="230" fill="#2d3748" font-size="10">J19-J22: Right Leg</text>
+                    <text x="615" y="260" fill="#2d3748" font-size="10">● Yellow = Joint axis</text>
+                </svg>
+            </div>
+        </div>
+
+        <!-- O. Dimensions -->
+        <div class="section">
+            <h3>O. Approximate Dimensions Summary</h3>
+            <table class="comparison-table">
+                <tr><th>Dimension</th><th>Value</th><th>Status</th></tr>
+                <tr><td>Overall Height</td><td>~1500 mm</td><td><span class="provisional">PROVISIONAL</span></td></tr>
+                <tr><td>Shoulder Width</td><td>~450 mm</td><td><span class="provisional">PROVISIONAL</span></td></tr>
+                <tr><td>Torso Dimensions</td><td>350 x 250 x 500 mm</td><td><span class="provisional">PROVISIONAL</span></td></tr>
+                <tr><td>Head Dimensions</td><td>220 x 180 x 160 mm</td><td><span class="provisional">PROVISIONAL</span></td></tr>
+                <tr><td>Upper Arm Length</td><td>~320 mm</td><td><span class="provisional">PROVISIONAL</span></td></tr>
+                <tr><td>Forearm Length</td><td>~280 mm</td><td><span class="provisional">PROVISIONAL</td></tr>
+                <tr><td>Thigh Length</td><td>~380 mm</td><td><span class="provisional">PROVISIONAL</span></td></tr>
+                <tr><td>Lower Leg Length</td><td>~350 mm</td><td><span class="provisional">PROVISIONAL</span></td></tr>
+                <tr><td>Foot Dimensions</td><td>285 x 150 mm</td><td><span class="provisional">PROVISIONAL</span></td></tr>
+            </table>
+        </div>
+
+        <!-- Exploded View -->
+        <div class="section">
+            <h3>F. Exploded Assembly View</h3>
+            <div class="robot-diagram">
+                <svg width="100%" height="500" viewBox="0 0 600 500">
+                    <!-- Exploded components arranged vertically -->
+
+                    <!-- Head - top -->
+                    <ellipse cx="300" cy="40" rx="60" ry="45" fill="#6b46c1" stroke="#2d3748" stroke-width="2" opacity="0.9"/>
+                    <text x="300" y="45" fill="white" font-size="11" text-anchor="middle">HEAD</text>
+                    <line x1="360" y1="40" x2="420" y2="40" stroke="#a0aec0" stroke-width="1"/>
+                    <text x="430" y="44" fill="#2d3748" font-size="9">01_HEAD_ASSEMBLY</text>
+
+                    <!-- Neck -->
+                    <rect x="280" y="100" width="40" height="35" fill="#718096" stroke="#2d3748" stroke-width="2" rx="3"/>
+                    <text x="300" y="122" fill="white" font-size="10" text-anchor="middle">NECK</text>
+                    <line x1="360" y1="117" x2="420" y2="117" stroke="#a0aec0" stroke-width="1"/>
+                    <text x="430" y="121" fill="#2d3748" font-size="9">02_NECK_ASSEMBLY</text>
+
+                    <!-- Torso -->
+                    <rect x="220" y="150" width="160" height="140" fill="#6b46c1" stroke="#2d3748" stroke-width="2" rx="10"/>
+                    <text x="300" y="220" fill="white" font-size="12" text-anchor="middle">TORSO</text>
+                    <line x1="380" y1="220" x2="420" y2="220" stroke="#a0aec0" stroke-width="1"/>
+                    <text x="430" y="224" fill="#2d3748" font-size="9">03_TORSO_ASSEMBLY</text>
+
+                    <!-- Arms - sides -->
+                    <rect x="100" y="170" width="100" height="30" fill="#718096" stroke="#2d3748" stroke-width="2" rx="5"/>
+                    <text x="150" y="190" fill="white" font-size="10" text-anchor="middle">L_ARM</text>
+                    <rect x="400" y="170" width="100" height="30" fill="#718096" stroke="#2d3748" stroke-width="2" rx="5"/>
+                    <text x="450" y="190" fill="white" font-size="10" text-anchor="middle">R_ARM</text>
+                    <line x1="80" y1="185" x2="40" y2="185" stroke="#a0aec0" stroke-width="1"/>
+                    <line x1="520" y1="185" x2="560" y2="185" stroke="#a0aec0" stroke-width="1"/>
+                    <text x="20" y="189" fill="#2d3748" font-size="9" text-anchor="start">04_L, 05_R ARM</text>
+
+                    <!-- Hip -->
+                    <rect x="240" y="305" width="120" height="35" fill="#805ad5" stroke="#2d3748" stroke-width="2" rx="6"/>
+                    <text x="300" y="327" fill="white" font-size="10" text-anchor="middle">HIP</text>
+                    <line x1="380" y1="322" x2="420" y2="322" stroke="#a0aec0" stroke-width="1"/>
+                    <text x="430" y="326" fill="#2d3748" font-size="9">06_HIP_ASSEMBLY</text>
+
+                    <!-- Legs -->
+                    <rect x="250" y="355" width="40" height="100" fill="#718096" stroke="#2d3748" stroke-width="2" rx="4"/>
+                    <text x="270" y="410" fill="white" font-size="9" text-anchor="middle">L_LEG</text>
+                    <rect x="310" y="355" width="40" height="100" fill="#718096" stroke="#2d3748" stroke-width="2" rx="4"/>
+                    <text x="330" y="410" fill="white" font-size="9" text-anchor="middle">R_LEG</text>
+                    <line x1="300" y1="405" x2="300" y2="450" stroke="#a0aec0" stroke-width="1"/>
+                    <text x="300" y="465" fill="#2d3748" font-size="9" text-anchor="middle">07_L, 08_R LEG</text>
+
+                    <!-- Feet -->
+                    <rect x="240" y="470" width="50" height="20" fill="#4a5568" stroke="#2d3748" stroke-width="2" rx="3"/>
+                    <text x="265" y="485" fill="white" font-size="8" text-anchor="middle">L_FOOT</text>
+                    <rect x="310" y="470" width="50" height="20" fill="#4a5568" stroke="#2d3748" stroke-width="2" rx="3"/>
+                    <text x="335" y="485" fill="white" font-size="8" text-anchor="middle">R_FOOT</text>
+                </svg>
+            </div>
+        </div>
+
+        <!-- FreeCAD Structure -->
+        <div class="section">
+            <h3>FreeCAD Document Structure</h3>
+            <div class="assembly-tree">
+Humanoid_Elder_Care_Robot.FCStd<br>
+├── <span class="folder">ROBOT_MASTER_ASSEMBLY</span><br>
+├── <span class="folder">01_HEAD_ASSEMBLY</span><br>
+│   ├── Head_Frame<br>
+│   ├── Head_Cover<br>
+│   ├── Camera_Mount<br>
+│   ├── Depth_Camera_Mount<br>
+│   ├── Microphone_Mount<br>
+│   └── Speaker_Mount<br>
+├── <span class="folder">02_NECK_ASSEMBLY</span><br>
+│   ├── Neck_Frame<br>
+│   ├── Pan_Joint<br>
+│   ├── Tilt_Joint<br>
+│   └── Bearings<br>
+├── <span class="folder">03_TORSO_ASSEMBLY</span><br>
+│   ├── Main_Frame<br>
+│   ├── Front_Panel<br>
+│   ├── Rear_Panel<br>
+│   ├── Electronics_Bay<br>
+│   ├── Battery_Bay<br>
+│   └── Shoulder_Mounts<br>
+├── <span class="folder">04_LEFT_ARM_ASSEMBLY</span> ... <span class="folder">05_RIGHT_ARM_ASSEMBLY</span><br>
+├── <span class="folder">06_HIP_ASSEMBLY</span><br>
+├── <span class="folder">07_LEFT_LEG_ASSEMBLY</span> ... <span class="folder">08_RIGHT_LEG_ASSEMBLY</span><br>
+├── <span class="folder">09_SENSORS</span><br>
+├── <span class="folder">10_ELECTRONICS</span><br>
+├── <span class="folder">11_CABLE_ROUTING</span><br>
+├── <span class="folder">12_FASTENERS</span><br>
+├── <span class="folder">13_JOINT_REFERENCE</span><br>
+└── <span class="folder">14_ENGINEERING_DRAWINGS</span><br>
+            </div>
+        </div>
+
+        <!-- Mobility Options -->
+        <div class="section">
+            <h3>Mobility Configuration Options</h3>
+            <div class="mobility-options">
+                <div class="card">
+                    <div class="card-header" style="background:#c53030;">OPTION A: Bipedal Walking</div>
+                    <div class="card-body">
+                        <span class="status-badge status-warning">HIGH RISK - Prototype Only</span>
+                        <table class="spec-table" style="margin-top:15px;">
+                            <tr><th>Aspect</th><th>Value</th></tr>
+                            <tr><td>Configuration</td><td>Bipedal humanoid</td></tr>
+                            <tr><td>Leg DOF</td><td>6 per leg</td></tr>
+                            <tr><td>Speed</td><td>0.5-1.0 m/s</td></tr>
+                            <tr><td>Balance</td><td>IMU + F/T sensors</td></tr>
+                        </table>
+                        <p style="margin-top:15px; font-size:0.85rem;">
+                            Requires extensive development and physical testing. Walking is a hard problem.
+                        </p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" style="background:#276749;">OPTION B: Wheeled Base (Recommended)</div>
+                    <div class="card-body">
+                        <span class="status-badge status-existing">LOW RISK - Early Prototype</span>
+                        <table class="spec-table" style="margin-top:15px;">
+                            <tr><th>Aspect</th><th>Value</th></tr>
+                            <tr><td>Configuration</td><td>Omnidirectional 4-wheel</td></tr>
+                            <tr><td>Footprint</td><td>500 x 400 mm</td></tr>
+                            <tr><td>Speed</td><td>Up to 1.5 m/s</td></tr>
+                            <tr><td>Balance</td><td>Not required</td></tr>
+                        </table>
+                        <p style="margin-top:15px; font-size:0.85rem;">
+                            Faster development, proven technology. Focus on upper body and manipulation first.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Capability Status -->
+        <div class="section">
+            <h3>Capability Status</h3>
+            <table class="comparison-table">
+                <tr><th>Capability</th><th>Status</th><th>Notes</th></tr>
+                <tr><td>Voice Interaction</td><td><span class="status-badge status-existing">EXISTING</span></td><td>Microphone + speaker + NLP</td></tr>
+                <tr><td>Human Interaction</td><td><span class="status-badge status-existing">EXISTING</span></td><td>Display + sensors</td></tr>
+                <tr><td>Visual Perception</td><td><span class="status-badge status-prototype">PROTOTYPE</span></td><td>Camera integration needed</td></tr>
+                <tr><td>Person Detection</td><td><span class="status-badge status-prototype">PROTOTYPE</span></td><td>ML model + camera</td></tr>
+                <tr><td>Object Recognition</td><td><span class="status-badge status-prototype">PROTOTYPE</span></td><td>Training data required</td></tr>
+                <tr><td>Task Planning</td><td><span class="status-badge status-prototype">PROTOTYPE</span></td><td>Cognitive agent development</td></tr>
+                <tr><td>Navigation</td><td><span class="status-badge status-prototype">PROTOTYPE</span></td><td>SLAM + base control</td></tr>
+                <tr><td>Obstacle Avoidance</td><td><span class="status-badge status-prototype">PROTOTYPE</span></td><td>Sensor fusion needed</td></tr>
+                <tr><td>Object Manipulation</td><td><span class="status-badge status-prototype">PROTOTYPE</span></td><td>Arm + gripper control</td></tr>
+                <tr><td>Remote Monitoring</td><td><span class="status-badge status-prototype">PROTOTYPE</span></td><td>Network integration</td></tr>
+                <tr><td>Autonomous Execution</td><td><span class="status-badge status-prototype">PROTOTYPE</span></td><td>Full system integration</td></tr>
+            </table>
+        </div>
+
+        <!-- Safety Notes -->
+        <div class="section">
+            <h3>Safety & Design Notes</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">Elder-Care Safety Features</div>
+                    <div class="card-body">
+                        <ul style="margin-left:20px; font-size:0.9rem;">
+                            <li>Rounded external surfaces (no sharp edges)</li>
+                            <li>Mechanical joint limits</li>
+                            <li>Emergency stop button (accessible)</li>
+                            <li>Low-speed operation priority</li>
+                            <li>Safe gripper contact surfaces</li>
+                            <li>Stable base/wide feet</li>
+                            <li>Protected wiring</li>
+                            <li>Accessible service panels</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Important Disclaimers</div>
+                    <div class="card-body">
+                        <p style="color:var(--warning); font-weight:600; margin-bottom:10px;">
+                            NOT PRODUCTION READY
+                        </p>
+                        <ul style="margin-left:20px; font-size:0.9rem;">
+                            <li>Research prototype only</li>
+                            <li>Not certified safe</li>
+                            <li>Dimensions are provisional</li>
+                            <li>Walking not validated</li>
+                            <li>Fall detection experimental</li>
+                            <li>Not a medical device</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p><strong>HUMANOID ELDER-CARE ROBOT</strong> | Prototype Mechanical Architecture</p>
+        <p style="margin-top:10px; font-size:0.85rem;">
+            FreeCAD Development Reference | All dimensions PROVISIONAL - Validate before fabrication
+        </p>
+        <p style="margin-top:5px; font-size:0.75rem; opacity:0.8;">
+            Generated: 2026-10-03 | For engineering development only
+        </p>
+    </div>
+</body>
+</html>
